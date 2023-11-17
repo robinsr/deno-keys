@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "@utils/": "/Users/ryan/workspace/deno/utils/",
+    "std/": "https://deno.land/std@0.206.0/"
+  }
+}
