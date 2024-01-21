@@ -17,7 +17,7 @@ const cmd: NamedKeyOpt = {
   },
   sizes:{
     default: {
-      width: 6,
+      width: 9,
       height: 1
     }
   }
@@ -59,7 +59,7 @@ const ctrl: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 10,
+      width: 9,
       height: 1
     }
   }
@@ -118,7 +118,7 @@ const capslock: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 12,
+      width: 11,
       height: 1
     }
   }
@@ -137,8 +137,8 @@ const esc: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
-      height: 1
+      width: 9,
+      height: 0.70
     }
   }
 }
@@ -149,7 +149,7 @@ const enter: NamedKeyOpt = {
   type: 'ws',
   glyph: '↵',
   aliases: [
-    'return'
+    'return', '↩', '⌅', 'BENDER'
   ],
   hasLR: false,
   legend: {
@@ -186,11 +186,11 @@ const del: NamedKeyOpt = {
 }
 
 const fdel: NamedKeyOpt = {
-  name: 'fdel',
-  id: 'delete',
+  name: 'forward-delete',
+  id: 'fdel',
   type: 'ws',
   glyph: '⌦',
-  aliases: [],
+  aliases: [ 'forwarddelete '],
   hasLR: false,
   legend: {
     cap:  '{glyph}',
@@ -198,7 +198,7 @@ const fdel: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -210,7 +210,7 @@ const arrowUp: NamedKeyOpt = {
   type: 'arrow',
   glyph: '↑',
   aliases: [
-    'UP', 'Up', 'up', 'arrow-up'
+    'up', 'arrow-up'
   ],
   hasLR: false,
   legend: {
@@ -219,8 +219,9 @@ const arrowUp: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
-      height: 1
+      width: 7,
+      height: 1,
+      offset: 7
     }
   }
 }
@@ -231,7 +232,7 @@ const arrowDn: NamedKeyOpt = {
   type: 'arrow',
   glyph: '↓',
   aliases: [
-    'DOWN', 'Down', 'down', 'arrow-down'
+    'down', 'arrow-down'
   ],
   hasLR: false,
   legend: {
@@ -240,7 +241,7 @@ const arrowDn: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -252,7 +253,7 @@ const arrowL: NamedKeyOpt = {
   type: 'arrow',
   glyph: '←',
   aliases: [
-    'LEFT', 'Left', 'left', 'arrow-left'
+    'left', 'arrow-left'
   ],
   hasLR: false,
   legend: {
@@ -261,7 +262,7 @@ const arrowL: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -273,7 +274,7 @@ const arrrowR: NamedKeyOpt = {
   type: 'arrow',
   glyph: '→',
   aliases: [
-    '/(R|r)ight/', 'RIGHT', 'arrow-right'
+    'right', 'arrow-right'
   ],
   hasLR: false,
   legend: {
@@ -282,7 +283,7 @@ const arrrowR: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -301,7 +302,7 @@ const fn: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -317,7 +318,7 @@ const space: NamedKeyOpt = {
   ],
   hasLR: false,
   legend: {
-    cap:  '',
+    cap:  '<<sPaCe>>',
     kbd:  'Space'
   },
   sizes: {
@@ -341,7 +342,7 @@ const pageUp: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -362,7 +363,7 @@ const pageDn: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -381,7 +382,7 @@ const home: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -400,7 +401,7 @@ const end: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -419,7 +420,7 @@ const eject: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -438,7 +439,7 @@ const clear: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -457,7 +458,7 @@ const numEq: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -476,7 +477,7 @@ const numDivide: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -495,7 +496,7 @@ const numMultiply: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -514,7 +515,7 @@ const numSubtract: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
@@ -533,15 +534,15 @@ const numAdd: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
       height: 1
     }
   }
 }
 
 const numEnter: NamedKeyOpt = {
-  name: 'numEnter',
-  id: 'numEnter',
+  name: 'enter',
+  id: 'num-enter',
   type: 'numpad',
   glyph: '⌅',
   aliases: [],
@@ -552,15 +553,15 @@ const numEnter: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
-      height: 1
+      width: 7,
+      height: 2
     }
   }
 }
 
 const numDecimal: NamedKeyOpt = {
   name: 'numDecimal',
-  id: 'decimal',
+  id: 'num-decimal',
   type: 'numpad',
   glyph: '.',
   aliases: [],
@@ -571,7 +572,26 @@ const numDecimal: NamedKeyOpt = {
   },
   sizes: {
     default:  {
-      width: 6,
+      width: 7,
+      height: 1
+    }
+  }
+}
+
+const keyBreak: NamedKeyOpt = {
+  name: 'KeyBreak',
+  id: '<>',
+  type: 'numpad',
+  glyph: '.',
+  aliases: [],
+  hasLR: false,
+  legend: {
+    cap:  '',
+    kbd:  ''
+  },
+  sizes: {
+    default:  {
+      width: 5,
       height: 1
     }
   }
@@ -582,7 +602,7 @@ const keys = [
   del, fdel, arrowUp, arrowDn, arrowL, arrrowR,
   fn, space, pageUp, pageDn, home, end, eject,
   clear, numEq, numDivide, numMultiply, numSubtract,
-  numAdd, numEnter, numDecimal
+  numAdd, numEnter, numDecimal, keyBreak
 ];
 
 export default keys;

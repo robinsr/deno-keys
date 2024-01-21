@@ -1,4 +1,5 @@
 import KeyboardKey, { DEFAULT_OPTS } from './keys/keyboard-key.ts';
+import { getKeyList, MB110LL } from './keys/keyboard-config.ts';
 import {
   assertEquals, assert, assertFalse
 } from 'std/assert/mod.ts';
@@ -17,7 +18,13 @@ type anyBoolFunc = (...args: any[]) => boolean;
  * Runs a Deno Test with labels for test group and test item
  */
 const test = (group: string, item: string, fn: Deno.TestDefinition['fn']) =>
-  Deno.test(`deno-keys#${group} - ${item}`, fn);
+  Deno.test({ name: `deno-keys#${group} - ${item}`, fn });
+
+const testSkip = (group: string, item: string, fn: Deno.TestDefinition['fn']) =>
+  Deno.test({ name: `deno-keys#${group} - ${item}`, fn, ignore: true });
+
+const testOnly = (group: string, item: string, fn: Deno.TestDefinition['fn']) =>
+  Deno.test({ name: `deno-keys#${group} - ${item}`, fn, only: true });
 
 
 /**
@@ -62,6 +69,7 @@ test('KeyboardKey', 'basic', _t => {
   const foo = new KeyboardKey('foo');
 
   eq(foo.id, '{foo}');
+  eq(foo.name, 'foo');
   isTrue(foo.matches, '{foo}');
   isTrue(foo.matches, 'foo');
   isTrue(foo.matches, 'fOo');
@@ -73,6 +81,7 @@ test('KeyboardKey', 'basic', _t => {
 test('KeyboardKey', 'name/id variations', _t => {
   const fooWithId = new KeyboardKey('foo', { id: 'FooIdKey' });
   eq(fooWithId.id, '{FooIdKey}');
+  eq(fooWithId.name, 'foo');
   isTrue(fooWithId.matches, '{FooIdKey}');
   isTrue(fooWithId.matches, 'FooIdKey');
   isTrue(fooWithId.matches, 'foo');
@@ -87,6 +96,7 @@ test('KeyboardKey', 'name/id variations', _t => {
 
   const fooWithName = new KeyboardKey('foo', { name: 'FooNameKey' });
   eq(fooWithName.id, '{foo}');
+  eq(fooWithName.name, 'FooNameKey');
   isTrue(fooWithName.matches, '{foo}');
   isTrue(fooWithName.matches, 'FooNameKey');
   isTrue(fooWithName.matches, 'foo');
@@ -98,6 +108,7 @@ test('KeyboardKey', 'name/id variations', _t => {
 
   const barIdKey = new KeyboardKey('foo', { name: 'BarNameKey', id: 'BarIdKey' });
   eq(barIdKey.id, '{BarIdKey}')
+  eq(barIdKey.name, 'BarNameKey')
   isTrue(barIdKey.matches, '{BarIdKey}');
   isTrue(barIdKey.matches, 'baridkey');
   isTrue(barIdKey.matches, 'barnamekey');
@@ -112,7 +123,6 @@ test('KeyboardKey', 'name/id variations', _t => {
   isNotTrue(barIdKey.matches, 'foobar');
 });
 
-
 test('KeyboardKey', 'with options', async t => {
   const smile = '☻';
 
@@ -123,9 +133,13 @@ test('KeyboardKey', 'with options', async t => {
     glyph: smile,
     aliases: [ 'bar', 'QUX', 'foo[-_]bar' ],
     sizes: {
+      default: {
+        width: 3,
+        height: 17
+      },
       fooLayout: {
-        width: 20,
-        height: 100
+        width: 33,
+        height: 71
       }
     },
     legend: {
@@ -172,10 +186,38 @@ test('KeyboardKey', 'with options', async t => {
     isTrue(foo.matches, '{foobarleft}');
     isTrue(foo.matches, '{foobarright}');
   });
+
+  await t.step('Correct dimensions', () => {
+    eq(foo.width, 0);
+    eq(foo.height, 0);
+    eq(foo.offset, 0);
+  })
 });
 
+test('KeyboardKey', 'alpha keys', async t => {
+  await t.step('simple alpha keys match expected', () => {
+    const aKey = new KeyboardKey('bracket-left', {
+      ...DEFAULT_OPTS,
+      id: 'KeyA',
+      name: 'a',
+      type: 'alpha',
+      legend: {
+        cap: '[A]',
+        kbd: 'A'
+      }
+    });
+
+    isTrue(aKey.matches, 'a');
+    isTrue(aKey.matches, '{KeyA}');
+    isTrue(aKey.matches, 'A');
+    eq(aKey.legend.cap, '[A]');
+    eq(aKey.legend.kbd, 'A');
+  })
+})
+
+
 test('KeyboardKey', 'characters keys', async t => {
-  await t.step('it does things', () => {
+  await t.step('simple char keys match expected', () => {
     const bLeft = new KeyboardKey('bracket-left', {
       ...DEFAULT_OPTS,
       id: '\[',
@@ -189,7 +231,13 @@ test('KeyboardKey', 'characters keys', async t => {
 
     isTrue(bLeft.matches, '[');
     isTrue(bLeft.matches, '{[}');
+    eq(bLeft.legend.cap, '[');
+    eq(bLeft.legend.kbd, '[');
+  })
+})
 
-    debug(bLeft)
+testOnly('KeyboardConfig', 'getKeyList', async t => {
+  await t.step('configures a keyboard layout', () => {
+    debug(getKeyList(MB110LL))
   })
 })

@@ -1,108 +1,98 @@
-import { KeyboardConfig } from './key-types.ts';
+import { KeySym, KeyboardSpec } from './key-types.ts';
 import { SYMBOL_MAP } from './symbol.ts';
 
 
+const mapRow = (row: string): KeySym[] =>
+  row.split(' ').map(id => SYMBOL_MAP.find(id));
 
-const keyData = {
-  [SYMBOL_MAP['tab'].id]: SYMBOL_MAP['tab'].legend.cap,
-  [SYMBOL_MAP['esc'].id]: SYMBOL_MAP['esc'].legend.cap,
-  "{backspace}": "delete ⌫",
-  "{enter}": "return ↵",
-  "{capslock}": "caps lock ⇪",
-  "{shiftleft}": "shift ⇧",
-  "{shiftright}": "shift ⇧",
-  "{ctrlleft}": "ctrl ⌃",
-  "{ctrlright}": "ctrl ⌃",
-  "{altleft}": "alt ⌥",
-  "{altright}": "alt ⌥",
-  "{metaleft}": "cmd ⌘",
-  "{metaright}": "cmd ⌘"
-}
+const mapRows = (rows: string[]): KeySym[][] =>
+  rows.map(row => mapRow(row));
 
-export const shared = {
-  theme: "simple-keyboard hg-theme-default hg-layout-default vue-shortcuts",
-  physicalKeyboardHighlight: true,
-  syncInstanceInputs: true,
-  mergeDisplay: true
-}
 
-export const mainKeyOpts: KeyboardConfig = {
-  layout: {
-    default: [
-      "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
-      "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
-      "{tab} q w e r t y u i o p [ ] \\",
-      "{capslock} a s d f g h j k l ; ' {enter}",
-      "{shift} z x c v b n m , . / {shift}",
-      "{ctrlleft} {altleft} {metaleft} {space} {metaright} {altright} {ctrlright}"
-    ],
-    shift: [
-      "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
-      "~ ! @ # $ % ^ & * ( ) _ + {backspace}",
-      "{tab} Q W E R T Y U I O P { } |",
-      '{capslock} A S D F G H J K L : " {enter}',
-      "{shift} Z X C V B N M < > ? {shift}",
-      "{ctrlleft} {altleft} {metaleft} {space} {metaright} {altright} {ctrlright}"
-    ]
+export const MB110LL: KeyboardSpec = {
+  grid: {
+    cols: 3,
+    rows: 6
   },
-  display: keyData
-}
-
-const controlPadOpts: KeyboardConfig = {
-  layout: {
-    default: [
-      "{f13} {f14} {f15}",
-      "{fn} {home} {pageup}",
-      "{forwarddelete} {end} {pagedown}"
-    ]
-  },
-  display: {
-    "{f13}": "f13",
-    "{f14}": "f14",
-    "{f15}": "f15",
-    "{fn}": "fn",
-    "{delete}": "delete ⌦",
-    "{pageup}": "page up",
-    "{pagedown}": "page down",
+  sections: {
+    main: {
+      name: 'main',
+      rows: mapRows([
+        "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
+        "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
+        "{tab} q w e r t y u i o p [ ] \\",
+        "{capslock} a s d f g h j k l ; ' {enter}",
+        "{shift} z x c v b n m , . / {shift}",
+        "{ctrlleft} {altleft} {metaleft} {space} {metaright} {altright} {ctrlright}",
+      ]),
+      position: {
+        col: 1,
+        row: 1
+      }
+    },
+    controlPad: {
+      name: 'control-pad',
+      rows: mapRows([
+        "{f13} {f14} {f15}",
+        "{fn} {home} {pageup}",
+        "{fdel} {end} {pagedown}"
+      ]),
+      position: {
+        col: 2,
+        row: 1
+      },
+      grid: {
+        cols: 21,
+        rows: 3
+      }
+    },
+    arrowPad: {
+      name: 'arrow-keys',
+      rows: mapRows([
+        "{arrowup}",
+        "{arrowleft} {arrowdown} {arrowright}"
+      ]),
+      position: {
+        col: 2,
+        row: 5
+      },
+      grid: {
+        cols: 21,
+        rows: 2
+      }
+    },
+    numpad: {
+      name: 'numpad',
+      rows: mapRows([
+        "{f16} {f17} {f18} {f19}",
+        "{clear} {num-eq} {num-divide} {num-multiply}",
+        "{numpad7} {numpad8} {numpad9} {num-subtract}",
+        "{numpad4} {numpad5} {numpad6} {num-add}",
+        "{numpad1} {numpad2} {numpad3} {num-enter}",
+        "{numpad0} {num-decimal}"
+      ]),
+      position: {
+        col: 3,
+        row: 1
+      },
+      grid: {
+        cols: 28,
+        rows: 6
+      }
+    }
   }
 }
 
-const arrowsOpts: KeyboardConfig = {
-  layout: {
-    default: ["{arrowup}", "{arrowleft} {arrowdown} {arrowright}"]
-  }
+const Keyboards = {
+  apple_MB110LL: MB110LL
 }
 
-const numPadOpts: KeyboardConfig = {
-  layout: {
-    default: [
-      "{f16} {f17} {f18}",
-      "{numclear} {numeq} {numdivide}",
-      "{numpad7} {numpad8} {numpad9}",
-      "{numpad4} {numpad5} {numpad6}",
-      "{numpad1} {numpad2} {numpad3}",
-      "{numpad0} {numpaddecimal}"
-    ]
-  }
+export const getKeyList = (kb: KeyboardSpec): string[] => {
+  return Object.values(kb.sections)
+    .map(s => s.rows)
+    .flat(2)
+    .map(k => k.name)
+    .sort();
 }
 
-const numpadEndOpts: KeyboardConfig = {
-  layout: {
-    default: ["{numpadsubtract}", "{numpadadd}", "{numpadenter}"]
-  }
-}
-
-export const keyConfigs: [ string, KeyboardConfig ][] = [
-  [ 'main', mainKeyOpts ],
-  [ 'control', controlPadOpts ],
-  [ 'arrows', arrowsOpts ],
-  // [ 'numpad', numPadOpts ],
-  // [ 'numpadEnd', numpadEndOpts ]
-];
-
-export const keyList: Set<string> = new Set(keyConfigs
-    .flatMap(([ _, config]) => config.layout.default)
-    .map(row => row.split(' '))
-    .reduce((acc, row) => ([ ...acc, ...row ]), []));
-
-export default keyConfigs;
+export default Keyboards;

@@ -1,26 +1,3 @@
-export type Maybe<T> = T | null;
-
-export type Shortcut = {
-  label: string;
-  keys: string;
-}
-
-export type HotKey = Shortcut & {
-  symbols: KeySym[];
-  id: string
-};
-
-export type ItemGroup<T> = {
-  name: string;
-  groups: {
-    [group: string]: T[]
-  }
-}
-
-export type ShortcutGroup = ItemGroup<Shortcut>;
-export type HotKeyGroup = ItemGroup<HotKey>;
-
-
 export type KeyCodeEvent = {
   key: string
   keyCode: number
@@ -43,9 +20,12 @@ export type KeyType = 'alpha' | 'mod' | 'arrow' | 'ws' | 'fn' | 'numpad';
   Currently only supports rectangular keys
  */
 export type KeyDimensions = {
+  [profile: string]: {
     width: number;
     height: number;
+    offset?: number
   }
+}
 
 export type KeyLegend = {
   cap: string;
@@ -64,26 +44,54 @@ export type KeyOptions = {
   type?: KeyType;
   legend?: KeyLegend;
   name?: string;
-  aliases?: KeyAlias[];
-  forms?: string[];
+  aliases?: string[];
   glyph?: string | null;
   hasLR?: boolean;
-  sizes?: {
-    [profile: string]: KeyDimensions
-  }
+  sizes?: KeyDimensions
 }
 
-export type KeySym = Required<KeyOptions>;
+export type KeySym = {
+  id: string;
+  type: KeyType;
+  legend: KeyLegend;
+  name: string;
+  idVariants: string[];
+  width: number;
+  height: number;
+  offset: number;
+  matches(symbol: string): boolean;
+}
 
+/**
+ * KEYBOARD TYPES
+ */
 type KeyToken = KeySym | string;
 
-export type KeyboardConfig = {
-  layout: {
-    default: string[];
-    shift?: string[];
-  },
-  display?: {
-    [key: string]: string
-  }
+export type KeyboardRow = KeySym[];
+
+export type ItemPosition = {
+  row: number;
+  col: number;
 }
+
+export type ItemGrid = {
+  cols: number;
+  rows: number;
+}
+
+export type SectionLayout = {
+  name: string;
+  rows: KeyboardRow[];
+  position: ItemPosition;
+  grid?: ItemGrid;
+}
+
+export type KeyboardSpec = {
+  sections: {
+    [id: string]: SectionLayout
+  }
+  grid: ItemGrid
+}
+
+
 
